@@ -10,7 +10,6 @@ const modal = () => {
     open.forEach((item) => {
       item.addEventListener('click', (e) => {
         checkBtn = 1;
-        console.log(checkBtn);
         if (e.target) {
           e.preventDefault();
         }
@@ -59,7 +58,6 @@ const modal = () => {
         });
       }
     });
-    console.log(checkBtn);
 
     function endPageModal(selector) {
       window.addEventListener('scroll', () => {

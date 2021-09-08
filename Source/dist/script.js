@@ -931,11 +931,15 @@ module.exports = g;
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_modals__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./modules/modals */ "./src/js/modules/modals.js");
+/* harmony import */ var _modules_sliders__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modules/sliders */ "./src/js/modules/sliders.js");
+
 
 window.addEventListener('DOMContentLoaded', function () {
   'use strict';
 
   Object(_modules_modals__WEBPACK_IMPORTED_MODULE_0__["default"])();
+  Object(_modules_sliders__WEBPACK_IMPORTED_MODULE_1__["default"])(".feedback-slider-item", 'horizontal', ".main-prev-btn", ".main-next-btn");
+  Object(_modules_sliders__WEBPACK_IMPORTED_MODULE_1__["default"])(".main-slider-item", 'vertical', "", "");
 });
 
 /***/ }),
@@ -965,7 +969,6 @@ var modal = function modal() {
     open.forEach(function (item) {
       item.addEventListener('click', function (e) {
         checkBtn = 1;
-        console.log(checkBtn);
 
         if (e.target) {
           e.preventDefault();
@@ -1018,7 +1021,6 @@ var modal = function modal() {
         });
       }
     });
-    console.log(checkBtn);
 
     function endPageModal(selector) {
       window.addEventListener('scroll', function () {
@@ -1070,6 +1072,90 @@ var modal = function modal() {
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (modal);
+
+/***/ }),
+
+/***/ "./src/js/modules/sliders.js":
+/*!***********************************!*\
+  !*** ./src/js/modules/sliders.js ***!
+  \***********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_0__);
+
+
+var sliders = function sliders(slides, direction, prevSelector, nextSelector) {
+  var slideIndex = 0,
+      pause = false;
+  var items = document.querySelectorAll(slides); //main slider mecha
+
+  function showSlides() {
+    if (slideIndex > items.length - 1) {
+      slideIndex = 0;
+    }
+
+    if (slideIndex < 0) {
+      slideIndex = items.length - 1;
+    }
+
+    items.forEach(function (item) {
+      item.classList.add("animated");
+      item.style.display = "none";
+    }); //main slide on page
+
+    items[slideIndex].style.display = 'block';
+  }
+
+  showSlides(); //btns
+
+  try {
+    var prevBtn = document.querySelector(prevSelector),
+        nextBtn = document.querySelector(nextSelector);
+    prevBtn.addEventListener("click", function () {
+      slideIndex -= 1;
+      showSlides();
+      items[slideIndex].classList.remove("slideInRight");
+      items[slideIndex].classList.add("slideInLeft");
+    });
+    nextBtn.addEventListener("click", function () {
+      slideIndex += 1;
+      showSlides();
+      items[slideIndex].classList.remove("slideInLeft");
+      items[slideIndex].classList.add("slideInRight");
+    });
+  } catch (error) {}
+
+  function activateAnime() {
+    if (direction === "vertical") {
+      pause = setInterval(function () {
+        slideIndex += 1;
+        showSlides();
+        items[slideIndex].classList.add("slideInDown");
+      }, 4000);
+    } else {
+      pause = setInterval(function () {
+        slideIndex += 1;
+        showSlides();
+        items[slideIndex].classList.remove("slideInLeft");
+        items[slideIndex].classList.add("slideInRight");
+      }, 4000);
+    }
+  }
+
+  activateAnime();
+  items[0].parentNode.addEventListener('mouseenter', function () {
+    clearInterval(pause);
+  });
+  items[0].parentNode.addEventListener('mouseleave', function () {
+    activateAnime();
+  });
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (sliders);
 
 /***/ })
 
