@@ -1,3 +1,5 @@
+import {postData} from "./services/requests";
+
 function dataFromForms() {
   const forms = document.querySelectorAll('form');
   const inputs = document.querySelectorAll('input');
@@ -10,20 +12,6 @@ function dataFromForms() {
     loadingText: 'Загрузка...',
     successText: 'Спасибо! Скоро мы с вами свяжемся!',
     failureText: 'Что-то пошло не так...'
-  };
-
-  const serverPath = {
-    design: "assets/server.php",
-    consultation: "assets/consult.php"
-  };
-
-  const postData = async (url, data) => {
-    let result = await fetch(url, {
-      method: "POST",
-      body: data
-    });
-
-    return result.text();
   };
 
   const clearInputs = () => {

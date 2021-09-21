@@ -18,5 +18,5 @@ window.addEventListener('DOMContentLoaded', () => {
   mask("tel-mask");
   mask("tel-mask2");
   mask("tel-mask3");
-  moreBtn('.button-styles', '.styles-2');
+  moreBtn('.button-styles', '#styles .row');
 });
