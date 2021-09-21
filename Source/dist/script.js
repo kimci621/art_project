@@ -8943,6 +8943,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_mask__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/mask */ "./src/js/modules/mask.js");
 /* harmony import */ var _modules_validation__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/validation */ "./src/js/modules/validation.js");
 /* harmony import */ var _modules_morebtn__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./modules/morebtn */ "./src/js/modules/morebtn.js");
+/* harmony import */ var _modules_calc__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./modules/calc */ "./src/js/modules/calc.js");
+
 
 
 
@@ -8962,7 +8964,47 @@ window.addEventListener('DOMContentLoaded', function () {
   Object(_modules_mask__WEBPACK_IMPORTED_MODULE_3__["default"])("tel-mask2");
   Object(_modules_mask__WEBPACK_IMPORTED_MODULE_3__["default"])("tel-mask3");
   Object(_modules_morebtn__WEBPACK_IMPORTED_MODULE_5__["default"])('.button-styles', '#styles .row');
+  Object(_modules_calc__WEBPACK_IMPORTED_MODULE_6__["default"])('#size', '#material', '#options', '.promocode', '.calc-price');
 });
+
+/***/ }),
+
+/***/ "./src/js/modules/calc.js":
+/*!********************************!*\
+  !*** ./src/js/modules/calc.js ***!
+  \********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+var calc = function calc(size, material, others, promo, result) {
+  var sizeSelector = document.querySelector(size),
+      materialSelector = document.querySelector(material),
+      othersSelector = document.querySelector(others),
+      promoSelector = document.querySelector(promo),
+      resultSelector = document.querySelector(result);
+  var finalPrice = 0;
+
+  function calcPrice() {
+    finalPrice = +sizeSelector.value * +materialSelector.value + +othersSelector.value;
+    resultSelector.textContent = "\u0421\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C: ".concat(finalPrice, " \u0440\u0443\u0431\u043B\u0435\u0439");
+
+    if (sizeSelector.value == "" || materialSelector.value == "") {
+      resultSelector.textContent = "\u0412\u044B\u0431\u0435\u0440\u0438\u0442\u0435 \u0440\u0430\u0437\u043C\u0435\u0440 \u043A\u0430\u0440\u0442\u0438\u043D\u044B \u0438 \u043C\u0430\u0442\u0435\u0440\u0438\u0430\u043B \u043A\u0430\u0440\u0442\u0438\u043D\u044B!";
+    } else if (promoSelector.value === "IWANTPOPART") {
+      finalPrice = finalPrice * 0.7;
+      resultSelector.textContent = "\u0421\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C: ".concat(finalPrice, " \u0440\u0443\u0431\u043B\u0435\u0439");
+    }
+  }
+
+  sizeSelector.addEventListener('change', calcPrice);
+  materialSelector.addEventListener('change', calcPrice);
+  othersSelector.addEventListener('change', calcPrice);
+  promoSelector.addEventListener('input', calcPrice);
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (calc);
 
 /***/ }),
 

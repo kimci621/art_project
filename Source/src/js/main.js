@@ -4,6 +4,7 @@ import dataFromForms from "./modules/forms";
 import mask from "./modules/mask";
 import validator from "./modules/validation";
 import moreBtn from "./modules/morebtn";
+import calc from "./modules/calc";
 
 window.addEventListener('DOMContentLoaded', () => {
   'use strict';
@@ -19,4 +20,5 @@ window.addEventListener('DOMContentLoaded', () => {
   mask("tel-mask2");
   mask("tel-mask3");
   moreBtn('.button-styles', '#styles .row');
+  calc('#size', '#material', '#options', '.promocode', '.calc-price');
 });
