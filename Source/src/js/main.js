@@ -5,13 +5,18 @@ import mask from "./modules/mask";
 import validator from "./modules/validation";
 import moreBtn from "./modules/morebtn";
 import calc from "./modules/calc";
+import tabs from "./modules/tabs";
+import pictureSwap from "./modules/pictureSwap";
+import accordion from "./modules/accordion";
 
 window.addEventListener('DOMContentLoaded', () => {
   'use strict';
 
-
+  tabs();
   modal();
+  accordion('.accordion-heading', '.accordion-block');
   dataFromForms();
+  pictureSwap('.sizes-block');
   validator('[name="name"]');
   validator('[name="message"]');
   sliders(".feedback-slider-item", 'horizontal', ".main-prev-btn", ".main-next-btn");

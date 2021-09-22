@@ -2661,6 +2661,63 @@ $({ target: 'Array', proto: true, forced: FORCED }, {
 
 /***/ }),
 
+/***/ "./node_modules/core-js/modules/es.array.slice.js":
+/*!********************************************************!*\
+  !*** ./node_modules/core-js/modules/es.array.slice.js ***!
+  \********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var $ = __webpack_require__(/*! ../internals/export */ "./node_modules/core-js/internals/export.js");
+var isObject = __webpack_require__(/*! ../internals/is-object */ "./node_modules/core-js/internals/is-object.js");
+var isArray = __webpack_require__(/*! ../internals/is-array */ "./node_modules/core-js/internals/is-array.js");
+var toAbsoluteIndex = __webpack_require__(/*! ../internals/to-absolute-index */ "./node_modules/core-js/internals/to-absolute-index.js");
+var toLength = __webpack_require__(/*! ../internals/to-length */ "./node_modules/core-js/internals/to-length.js");
+var toIndexedObject = __webpack_require__(/*! ../internals/to-indexed-object */ "./node_modules/core-js/internals/to-indexed-object.js");
+var createProperty = __webpack_require__(/*! ../internals/create-property */ "./node_modules/core-js/internals/create-property.js");
+var arrayMethodHasSpeciesSupport = __webpack_require__(/*! ../internals/array-method-has-species-support */ "./node_modules/core-js/internals/array-method-has-species-support.js");
+var wellKnownSymbol = __webpack_require__(/*! ../internals/well-known-symbol */ "./node_modules/core-js/internals/well-known-symbol.js");
+
+var SPECIES = wellKnownSymbol('species');
+var nativeSlice = [].slice;
+var max = Math.max;
+
+// `Array.prototype.slice` method
+// https://tc39.github.io/ecma262/#sec-array.prototype.slice
+// fallback for not array-like ES3 strings and DOM objects
+$({ target: 'Array', proto: true, forced: !arrayMethodHasSpeciesSupport('slice') }, {
+  slice: function slice(start, end) {
+    var O = toIndexedObject(this);
+    var length = toLength(O.length);
+    var k = toAbsoluteIndex(start, length);
+    var fin = toAbsoluteIndex(end === undefined ? length : end, length);
+    // inline `ArraySpeciesCreate` for usage native `Array#slice` where it's possible
+    var Constructor, result, n;
+    if (isArray(O)) {
+      Constructor = O.constructor;
+      // cross-realm fallback
+      if (typeof Constructor == 'function' && (Constructor === Array || isArray(Constructor.prototype))) {
+        Constructor = undefined;
+      } else if (isObject(Constructor)) {
+        Constructor = Constructor[SPECIES];
+        if (Constructor === null) Constructor = undefined;
+      }
+      if (Constructor === Array || Constructor === undefined) {
+        return nativeSlice.call(O, k, fin);
+      }
+    }
+    result = new (Constructor === undefined ? Array : Constructor)(max(fin - k, 0));
+    for (n = 0; k < fin; k++, n++) if (k in O) createProperty(result, n, O[k]);
+    result.length = n;
+    return result;
+  }
+});
+
+
+/***/ }),
+
 /***/ "./node_modules/core-js/modules/es.function.name.js":
 /*!**********************************************************!*\
   !*** ./node_modules/core-js/modules/es.function.name.js ***!
@@ -8944,6 +9001,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_validation__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/validation */ "./src/js/modules/validation.js");
 /* harmony import */ var _modules_morebtn__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./modules/morebtn */ "./src/js/modules/morebtn.js");
 /* harmony import */ var _modules_calc__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./modules/calc */ "./src/js/modules/calc.js");
+/* harmony import */ var _modules_tabs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./modules/tabs */ "./src/js/modules/tabs.js");
+/* harmony import */ var _modules_pictureSwap__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./modules/pictureSwap */ "./src/js/modules/pictureSwap.js");
+/* harmony import */ var _modules_accordion__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./modules/accordion */ "./src/js/modules/accordion.js");
+
+
+
 
 
 
@@ -8954,8 +9017,11 @@ __webpack_require__.r(__webpack_exports__);
 window.addEventListener('DOMContentLoaded', function () {
   'use strict';
 
+  Object(_modules_tabs__WEBPACK_IMPORTED_MODULE_7__["default"])();
   Object(_modules_modals__WEBPACK_IMPORTED_MODULE_0__["default"])();
+  Object(_modules_accordion__WEBPACK_IMPORTED_MODULE_9__["default"])('.accordion-heading', '.accordion-block');
   Object(_modules_forms__WEBPACK_IMPORTED_MODULE_2__["default"])();
+  Object(_modules_pictureSwap__WEBPACK_IMPORTED_MODULE_8__["default"])('.sizes-block');
   Object(_modules_validation__WEBPACK_IMPORTED_MODULE_4__["default"])('[name="name"]');
   Object(_modules_validation__WEBPACK_IMPORTED_MODULE_4__["default"])('[name="message"]');
   Object(_modules_sliders__WEBPACK_IMPORTED_MODULE_1__["default"])(".feedback-slider-item", 'horizontal', ".main-prev-btn", ".main-next-btn");
@@ -8966,6 +9032,46 @@ window.addEventListener('DOMContentLoaded', function () {
   Object(_modules_morebtn__WEBPACK_IMPORTED_MODULE_5__["default"])('.button-styles', '#styles .row');
   Object(_modules_calc__WEBPACK_IMPORTED_MODULE_6__["default"])('#size', '#material', '#options', '.promocode', '.calc-price');
 });
+
+/***/ }),
+
+/***/ "./src/js/modules/accordion.js":
+/*!*************************************!*\
+  !*** ./src/js/modules/accordion.js ***!
+  \*************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_0__);
+
+
+var accordion = function accordion(triggers, contents) {
+  var allTriggers = document.querySelectorAll(triggers);
+  var allContent = document.querySelectorAll(contents);
+  allContent.forEach(function (item) {
+    item.style.display = 'none';
+  });
+  allTriggers.forEach(function (item) {
+    item.addEventListener('click', function () {
+      this.classList.toggle('active');
+
+      if (this.classList.contains('active')) {
+        this.style.color = "#c51abb";
+        this.nextSibling.nextSibling.classList.add('animated', 'fadeInUp');
+        this.nextSibling.nextSibling.style.display = "block";
+      } else {
+        this.style.color = "";
+        this.nextSibling.nextSibling.classList.remove('animated', 'fadeInUp');
+        this.nextSibling.nextSibling.style.display = "none";
+      }
+    });
+  });
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (accordion);
 
 /***/ }),
 
@@ -9308,6 +9414,59 @@ var moreBtn = function moreBtn(selectorBtn, selectorElements) {
 
 /***/ }),
 
+/***/ "./src/js/modules/pictureSwap.js":
+/*!***************************************!*\
+  !*** ./src/js/modules/pictureSwap.js ***!
+  \***************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var core_js_modules_es_array_slice__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.array.slice */ "./node_modules/core-js/modules/es.array.slice.js");
+/* harmony import */ var core_js_modules_es_array_slice__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_slice__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_1__);
+
+
+
+var pictureSwap = function pictureSwap(imgSelector) {
+  var imgBlocks = document.querySelectorAll(imgSelector);
+
+  function show(item) {
+    item.classList.add("animated", "fadeIn");
+    var img = item.querySelector('img');
+    img.src = img.src.slice(0, -4) + '-1.png';
+    item.querySelectorAll('p:not(.sizes-hit)').forEach(function (p) {
+      p.style.display = "none";
+    });
+  }
+
+  function out(item) {
+    item.classList.remove("animated", "fadeIn");
+    var img = item.querySelector('img');
+    img.src = img.src.slice(0, -6) + '.png';
+    item.querySelectorAll('p').forEach(function (p) {
+      p.style.display = "block";
+    });
+  }
+
+  imgBlocks.forEach(function (item) {
+    item.addEventListener('mouseover', function () {
+      show(item);
+    });
+  });
+  imgBlocks.forEach(function (item) {
+    item.addEventListener('mouseout', function () {
+      out(item);
+    });
+  });
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (pictureSwap);
+
+/***/ }),
+
 /***/ "./src/js/modules/services/requests.js":
 /*!*********************************************!*\
   !*** ./src/js/modules/services/requests.js ***!
@@ -9471,6 +9630,95 @@ var sliders = function sliders(slides, direction, prevSelector, nextSelector) {
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (sliders);
+
+/***/ }),
+
+/***/ "./src/js/modules/tabs.js":
+/*!********************************!*\
+  !*** ./src/js/modules/tabs.js ***!
+  \********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_0__);
+
+
+var tabs = function tabs() {
+  var wrapper = document.querySelector('#portfolio'),
+      noPortfolio = wrapper.querySelector('.portfolio-no'),
+      btnsParent = wrapper.querySelector('.portfolio-menu'),
+      allBtns = btnsParent.querySelectorAll('li'),
+      all = btnsParent.querySelector('.all'),
+      lovers = btnsParent.querySelector('.lovers'),
+      chef = btnsParent.querySelector('.chef'),
+      girl = btnsParent.querySelector('.girl'),
+      guy = btnsParent.querySelector('.guy'),
+      grandmother = btnsParent.querySelector('.grandmother'),
+      granddad = btnsParent.querySelector('.granddad'),
+      contentParent = wrapper.querySelector('.portfolio-wrapper'),
+      allContent = contentParent.querySelectorAll('.all'),
+      girlContent = contentParent.querySelectorAll('.girl'),
+      loversContent = contentParent.querySelectorAll('.lovers'),
+      guyContent = contentParent.querySelectorAll('.guy'),
+      chefContent = contentParent.querySelectorAll('.chef');
+  btnsParent.addEventListener('click', function (e) {
+    if (e.target) {
+      console.log('hi');
+      allBtns.forEach(function (item) {
+        item.classList.remove('active');
+        item.classList.remove('animated', 'pulse');
+      });
+      e.target.classList.add('animated', 'pulse');
+      e.target.classList.add('active');
+    }
+  });
+
+  function filter(items) {
+    allContent.forEach(function (i) {
+      i.style.display = 'none';
+      i.classList.remove('animated', 'fadeIn');
+    });
+    noPortfolio.style.display = 'none';
+    noPortfolio.classList.remove('animated', 'fadeIn');
+
+    if (items) {
+      items.forEach(function (i) {
+        i.classList.add('animated', 'fadeIn');
+        i.style.display = 'inline';
+      });
+    } else {
+      noPortfolio.style.display = 'block';
+      noPortfolio.classList.add('animated', 'fadeIn');
+    }
+  }
+
+  all.addEventListener('click', function () {
+    filter(allContent);
+  });
+  lovers.addEventListener('click', function () {
+    filter(loversContent);
+  });
+  chef.addEventListener('click', function () {
+    filter(chefContent);
+  });
+  girl.addEventListener('click', function () {
+    filter(girlContent);
+  });
+  guy.addEventListener('click', function () {
+    filter(guyContent);
+  });
+  grandmother.addEventListener('click', function () {
+    filter();
+  });
+  granddad.addEventListener('click', function () {
+    filter();
+  });
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (tabs);
 
 /***/ }),
 
