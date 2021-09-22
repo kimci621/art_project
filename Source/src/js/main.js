@@ -8,12 +8,16 @@ import calc from "./modules/calc";
 import tabs from "./modules/tabs";
 import pictureSwap from "./modules/pictureSwap";
 import accordion from "./modules/accordion";
+import menuBurger from "./modules/menuBurger";
+import LazyScroll from "./modules/lazyscroll";
 
 window.addEventListener('DOMContentLoaded', () => {
   'use strict';
 
   tabs();
   modal();
+  LazyScroll('.pageup');
+  menuBurger(".burger", ".burger-menu");
   accordion('.accordion-heading', '.accordion-block');
   dataFromForms();
   pictureSwap('.sizes-block');

@@ -9004,6 +9004,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_tabs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./modules/tabs */ "./src/js/modules/tabs.js");
 /* harmony import */ var _modules_pictureSwap__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./modules/pictureSwap */ "./src/js/modules/pictureSwap.js");
 /* harmony import */ var _modules_accordion__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./modules/accordion */ "./src/js/modules/accordion.js");
+/* harmony import */ var _modules_menuBurger__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./modules/menuBurger */ "./src/js/modules/menuBurger.js");
+/* harmony import */ var _modules_lazyscroll__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./modules/lazyscroll */ "./src/js/modules/lazyscroll.js");
+
+
 
 
 
@@ -9019,6 +9023,8 @@ window.addEventListener('DOMContentLoaded', function () {
 
   Object(_modules_tabs__WEBPACK_IMPORTED_MODULE_7__["default"])();
   Object(_modules_modals__WEBPACK_IMPORTED_MODULE_0__["default"])();
+  Object(_modules_lazyscroll__WEBPACK_IMPORTED_MODULE_11__["default"])('.pageup');
+  Object(_modules_menuBurger__WEBPACK_IMPORTED_MODULE_10__["default"])(".burger", ".burger-menu");
   Object(_modules_accordion__WEBPACK_IMPORTED_MODULE_9__["default"])('.accordion-heading', '.accordion-block');
   Object(_modules_forms__WEBPACK_IMPORTED_MODULE_2__["default"])();
   Object(_modules_pictureSwap__WEBPACK_IMPORTED_MODULE_8__["default"])('.sizes-block');
@@ -9056,6 +9062,13 @@ var accordion = function accordion(triggers, contents) {
   });
   allTriggers.forEach(function (item) {
     item.addEventListener('click', function () {
+      // allContent.forEach(item => {
+      //   item.style.display = 'none';
+      // });
+      // allTriggers.forEach(item => {
+      //   item.classList.remove('active');
+      //   item.style.color = "";
+      // });
       this.classList.toggle('active');
 
       if (this.classList.contains('active')) {
@@ -9212,6 +9225,64 @@ function dataFromForms() {
 
 /***/ }),
 
+/***/ "./src/js/modules/lazyscroll.js":
+/*!**************************************!*\
+  !*** ./src/js/modules/lazyscroll.js ***!
+  \**************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_0__);
+
+
+var LazyScroll = function LazyScroll(upSelector) {
+  var upElem = document.querySelector(upSelector);
+  window.addEventListener('scroll', function () {
+    if (document.documentElement.scrollTop > 1650) {
+      upElem.classList.add('animated', 'fadeIn');
+      upElem.classList.remove('fadeOut');
+    } else {
+      upElem.classList.add('fadeOut');
+      upElem.classList.remove('fadeIn');
+    }
+  });
+  var links = document.querySelectorAll('[href^="#"]'),
+      speed = 0.3;
+  links.forEach(function (link) {
+    link.addEventListener('click', function (event) {
+      event.preventDefault();
+      var widthTop = document.documentElement.scrollTop,
+          hash = this.hash,
+          toBlock = document.querySelector(hash).getBoundingClientRect().top,
+          start = null;
+      requestAnimationFrame(step);
+
+      function step(time) {
+        if (start === null) {
+          start = time;
+        }
+
+        var progress = time - start,
+            r = toBlock < 0 ? Math.max(widthTop - progress / speed, widthTop + toBlock) : Math.min(widthTop + progress / speed, widthTop + toBlock);
+        document.documentElement.scrollTo(0, r);
+
+        if (r != widthTop + toBlock) {
+          requestAnimationFrame(step);
+        } else {
+          location.hash = hash;
+        }
+      }
+    });
+  });
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (LazyScroll);
+
+/***/ }),
+
 /***/ "./src/js/modules/mask.js":
 /*!********************************!*\
   !*** ./src/js/modules/mask.js ***!
@@ -9233,6 +9304,39 @@ var mask = function mask(selector) {
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (mask);
+
+/***/ }),
+
+/***/ "./src/js/modules/menuBurger.js":
+/*!**************************************!*\
+  !*** ./src/js/modules/menuBurger.js ***!
+  \**************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+var menuBurger = function menuBurger(burgerbtn, burgermenu) {
+  var btn = document.querySelector(burgerbtn),
+      menu = document.querySelector(burgermenu);
+  menu.style.display = "none";
+  btn.addEventListener('click', function () {
+    if (window.screen.availWidth < 993 && menu.style.display == "none") {
+      menu.classList.add("animated", "fadeInDown");
+      menu.style.display = "block";
+    } else {
+      menu.classList.remove("animated", "fadeInDown");
+      menu.style.display = "none";
+    }
+  });
+  window.addEventListener('resize', function () {
+    if (window.screen.availWidth > 992) {
+      menu.style.display = "none";
+    }
+  });
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (menuBurger);
 
 /***/ }),
 

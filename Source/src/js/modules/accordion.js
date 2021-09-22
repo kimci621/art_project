@@ -8,6 +8,13 @@ const accordion = (triggers, contents) => {
 
   allTriggers.forEach(item => {
     item.addEventListener('click', function () {
+      // allContent.forEach(item => {
+      //   item.style.display = 'none';
+      // });
+      // allTriggers.forEach(item => {
+      //   item.classList.remove('active');
+      //   item.style.color = "";
+      // });
       this.classList.toggle('active');
       if (this.classList.contains('active')) {
         this.style.color = "#c51abb";
