@@ -10,10 +10,12 @@ import pictureSwap from "./modules/pictureSwap";
 import accordion from "./modules/accordion";
 import menuBurger from "./modules/menuBurger";
 import LazyScroll from "./modules/lazyscroll";
+import drop from "./modules/drop";
 
 window.addEventListener('DOMContentLoaded', () => {
   'use strict';
 
+  drop();
   tabs();
   modal();
   LazyScroll('.pageup');

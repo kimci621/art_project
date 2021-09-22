@@ -9006,6 +9006,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_accordion__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./modules/accordion */ "./src/js/modules/accordion.js");
 /* harmony import */ var _modules_menuBurger__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./modules/menuBurger */ "./src/js/modules/menuBurger.js");
 /* harmony import */ var _modules_lazyscroll__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./modules/lazyscroll */ "./src/js/modules/lazyscroll.js");
+/* harmony import */ var _modules_drop__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./modules/drop */ "./src/js/modules/drop.js");
+
 
 
 
@@ -9021,6 +9023,7 @@ __webpack_require__.r(__webpack_exports__);
 window.addEventListener('DOMContentLoaded', function () {
   'use strict';
 
+  Object(_modules_drop__WEBPACK_IMPORTED_MODULE_12__["default"])();
   Object(_modules_tabs__WEBPACK_IMPORTED_MODULE_7__["default"])();
   Object(_modules_modals__WEBPACK_IMPORTED_MODULE_0__["default"])();
   Object(_modules_lazyscroll__WEBPACK_IMPORTED_MODULE_11__["default"])('.pageup');
@@ -9124,6 +9127,70 @@ var calc = function calc(size, material, others, promo, result) {
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (calc);
+
+/***/ }),
+
+/***/ "./src/js/modules/drop.js":
+/*!********************************!*\
+  !*** ./src/js/modules/drop.js ***!
+  \********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var core_js_modules_es_function_name__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.function.name */ "./node_modules/core-js/modules/es.function.name.js");
+/* harmony import */ var core_js_modules_es_function_name__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_function_name__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_1__);
+
+
+
+var drop = function drop() {
+  var uploads = document.querySelectorAll("[name='upload']");
+
+  function preventDef(e) {
+    e.preventDefault();
+  }
+
+  ['drop', 'dragenter', 'dragleave', 'dragover'].forEach(function (eventName) {
+    uploads.forEach(function (upload) {
+      upload.addEventListener(eventName, preventDef); // console.log(upload.previousElementSibling);
+    });
+  });
+
+  function highlight(item) {
+    item.previousElementSibling.style.border = "1px solid purple";
+    item.previousElementSibling.style.backgroundColor = "#ededed";
+  }
+
+  function unHighlight(item) {
+    item.previousElementSibling.style.border = "none";
+    item.previousElementSibling.style.backgroundColor = "";
+  }
+
+  ['dragenter', 'dragover'].forEach(function (eventName) {
+    uploads.forEach(function (upload) {
+      upload.addEventListener(eventName, function () {
+        highlight(upload);
+      });
+    });
+  });
+  uploads.forEach(function (upload) {
+    upload.addEventListener('dragleave', function () {
+      unHighlight(upload);
+    });
+  });
+  uploads.forEach(function (upload) {
+    upload.addEventListener('drop', function (e) {
+      upload.files = e.dataTransfer.files;
+      upload.previousElementSibling.textContent = e.dataTransfer.files[0].name;
+      upload.previousElementSibling.previousElementSibling.textContent = e.dataTransfer.files[0].name;
+    });
+  });
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (drop);
 
 /***/ }),
 
